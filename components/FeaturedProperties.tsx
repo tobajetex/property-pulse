@@ -1,12 +1,15 @@
 import { connectDB } from "@/config/database";
 import Property from "@/models/Property";
+import FeaturedPropertyCard from "./FeaturedPropertyCard";
+import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 export default async function FeaturedProperties() {
   await connectDB();
 
   const properties = await Property.find({ is_featured: true }).lean();
+  const serializedProperties = convertToSerializeableObject(properties);
 
-  if (properties.length === 0) {
+  if (serializedProperties.length === 0) {
     return null;
   }
 
@@ -17,19 +20,8 @@ export default async function FeaturedProperties() {
           Featured Properties
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {properties.map((property) => (
-            <div
-              key={String(property._id)}
-              className="bg-white rounded-xl shadow-md relative"
-            >
-              <div className="p-6">
-                <h3 className="text-xl font-bold">{property.name}</h3>
-                <p className="text-gray-600">{property.type}</p>
-                <p className="text-gray-500 mt-2">
-                  {property.location?.city}, {property.location?.state}
-                </p>
-              </div>
-            </div>
+          {serializedProperties.map((property) => (
+            <FeaturedPropertyCard key={property._id} property={property} />
           ))}
         </div>
       </div>
