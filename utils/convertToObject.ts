@@ -14,21 +14,25 @@ export function convertToSerializeableObject<T>(leanDocument: T): T {
 
   // Handle objects
   if (typeof leanDocument === "object" && leanDocument !== null) {
-    const result = { ...leanDocument } as Record<string, any>;
+    // Use Record<string, unknown> instead of any
+    const result = { ...leanDocument } as Record<string, unknown>;
 
     for (const key of Object.keys(result)) {
+      const value = result[key];
+
       // Convert ObjectId and Date to strings
       if (
-        result[key] &&
-        typeof result[key] === "object" &&
-        "toString" in result[key]
+        value &&
+        typeof value === "object" &&
+        "toString" in value &&
+        typeof value.toString === "function"
       ) {
-        result[key] = result[key].toString();
+        result[key] = value.toString();
       }
 
       // Recursively convert nested objects
-      if (typeof result[key] === "object" && result[key] !== null) {
-        result[key] = convertToSerializeableObject(result[key]);
+      if (value && typeof value === "object" && value !== null) {
+        result[key] = convertToSerializeableObject(value);
       }
     }
 
