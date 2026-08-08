@@ -14,25 +14,32 @@ export function convertToSerializeableObject<T>(leanDocument: T): T {
 
   // Handle objects
   if (typeof leanDocument === "object" && leanDocument !== null) {
-    // Use Record<string, unknown> instead of any
-    const result = { ...leanDocument } as Record<string, unknown>;
+    const result = {} as Record<string, unknown>;
 
-    for (const key of Object.keys(result)) {
-      const value = result[key];
-
-      // Convert ObjectId and Date to strings
+    for (const [key, value] of Object.entries(
+      leanDocument as Record<string, unknown>,
+    )) {
+      // Convert ObjectId, Date, and other MongoDB types to strings
       if (
         value &&
         typeof value === "object" &&
         "toString" in value &&
         typeof value.toString === "function"
       ) {
-        result[key] = value.toString();
+        // Special handling for ObjectId
+        if (value.constructor?.name === "ObjectId") {
+          result[key] = value.toString();
+        } else {
+          result[key] = value.toString();
+        }
       }
-
       // Recursively convert nested objects
-      if (value && typeof value === "object" && value !== null) {
+      else if (value && typeof value === "object" && value !== null) {
         result[key] = convertToSerializeableObject(value);
+      }
+      // Handle primitive values
+      else {
+        result[key] = value;
       }
     }
 
