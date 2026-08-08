@@ -6,26 +6,32 @@ import Property from "@/models/Property";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 interface PropertiesPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     pageSize?: string;
-  };
+  }>;
 }
 
 export default async function PropertiesPage({
   searchParams,
 }: PropertiesPageProps) {
-  const page = parseInt(searchParams.page || "1");
-  const pageSize = parseInt(searchParams.pageSize || "9");
-  const skip = (page - 1) * pageSize;
+  // ✅ AWAIT the searchParams before accessing
+  const { page = "1", pageSize = "9" } = await searchParams;
+
+  const currentPage = parseInt(page);
+  const currentPageSize = parseInt(pageSize);
+  const skip = (currentPage - 1) * currentPageSize;
 
   await connectDB();
 
   const total = await Property.countDocuments({});
-  const properties = await Property.find({}).skip(skip).limit(pageSize).lean();
+  const properties = await Property.find({})
+    .skip(skip)
+    .limit(currentPageSize)
+    .lean();
 
   const serializedProperties = convertToSerializeableObject(properties);
-  const showPagination = total > pageSize;
+  const showPagination = total > currentPageSize;
 
   return (
     <>
@@ -54,7 +60,11 @@ export default async function PropertiesPage({
           )}
 
           {showPagination && (
-            <Pagination page={page} pageSize={pageSize} totalItems={total} />
+            <Pagination
+              page={currentPage}
+              pageSize={currentPageSize}
+              totalItems={total}
+            />
           )}
         </div>
       </section>

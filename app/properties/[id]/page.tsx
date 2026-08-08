@@ -12,17 +12,20 @@ import {
 } from "react-icons/fa";
 
 interface PropertyDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function PropertyDetailPage({
   params,
 }: PropertyDetailPageProps) {
+  // ✅ AWAIT the params before accessing
+  const { id } = await params;
+
   await connectDB();
 
-  const propertyDoc = await Property.findById(params.id).lean();
+  const propertyDoc = await Property.findById(id).lean();
 
   if (!propertyDoc) {
     return (
