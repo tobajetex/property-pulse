@@ -1,6 +1,12 @@
+"use client";
+
+import { useSession } from "next-auth/react";
 import InfoBox from "./InfoBox";
 
 export default function InfoBoxes() {
+  const { data: session } = useSession();
+  const isLoggedIn = !!session?.user;
+
   return (
     <section>
       <div className="container-xl lg:container m-auto">
@@ -17,13 +23,14 @@ export default function InfoBoxes() {
             Find your dream rental property. Bookmark properties and contact
             owners.
           </InfoBox>
+
           <InfoBox
             heading="For Property Owners"
             backgroundColor="bg-blue-100"
             buttonInfo={{
-              text: "Add Property",
-              link: "/properties/add",
-              backgroundColor: "bg-blue-500",
+              text: isLoggedIn ? "Add Property" : "Login to Add Property",
+              link: isLoggedIn ? "/properties/add" : "/api/auth/signin",
+              backgroundColor: isLoggedIn ? "bg-blue-500" : "bg-gray-500",
             }}
           >
             List your properties and reach potential tenants. Rent as an Airbnb
