@@ -1,33 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { useFormStatus } from "react-dom";
+import { addProperty } from "@/app/actions/addProperty";
 
-export default function PropertyAddForm() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-
-    try {
-      // For now, just show a success message
-      // We'll implement the actual API call later
-      toast.success("Property added successfully!");
-      router.push("/properties");
-    } catch (error) {
-      toast.error("Failed to add property");
-    } finally {
-      setLoading(false);
-    }
-  };
+function SubmitButton() {
+  const { pending } = useFormStatus();
 
   return (
-    <form onSubmit={handleSubmit}>
+    <button
+      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+      type="submit"
+      disabled={pending}
+    >
+      {pending ? "Adding..." : "Add Property"}
+    </button>
+  );
+}
+
+export default function PropertyAddForm() {
+  return (
+    <form action={addProperty}>
       <h2 className="text-3xl text-center font-semibold mb-6">Add Property</h2>
 
       <div className="mb-4">
@@ -282,14 +274,22 @@ export default function PropertyAddForm() {
         />
       </div>
 
+      <div className="mb-4">
+        <label htmlFor="images" className="block text-gray-700 font-bold mb-2">
+          Images (Select up to 4 images)
+        </label>
+        <input
+          type="file"
+          id="images"
+          name="images"
+          className="border rounded w-full py-2 px-3"
+          accept="image/*"
+          multiple
+        />
+      </div>
+
       <div>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Adding..." : "Add Property"}
-        </button>
+        <SubmitButton />
       </div>
     </form>
   );
