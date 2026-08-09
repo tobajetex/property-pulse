@@ -13,16 +13,13 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  // Close mobile menu when route changes
+  // Close menus when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // Close profile menu when route changes
   useEffect(() => {
     setIsProfileMenuOpen(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   const isActive = (path: string) => {
@@ -81,7 +78,8 @@ export default function Navbar() {
                 >
                   Properties
                 </Link>
-                {session && (
+                {/* ✅ Fixed: Only show Add Property when logged in */}
+                {session?.user && (
                   <Link
                     href="/properties/add"
                     className={`${isActive("/properties/add")} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
@@ -95,7 +93,7 @@ export default function Navbar() {
 
           {/* Right Side */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0">
-            {!session ? (
+            {!session?.user ? (
               // Logged Out
               <button
                 onClick={() => signIn("google")}
@@ -107,14 +105,12 @@ export default function Navbar() {
             ) : (
               // Logged In
               <div className="flex items-center space-x-4">
-                {/* Messages Icon */}
                 <Link href="/messages" className="relative">
                   <button className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <FaBell className="h-6 w-6" />
                   </button>
                 </Link>
 
-                {/* Profile Dropdown */}
                 <div className="relative ml-3">
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
@@ -129,7 +125,6 @@ export default function Navbar() {
                     />
                   </button>
 
-                  {/* Dropdown Menu */}
                   {isProfileMenuOpen && (
                     <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
                       <Link
@@ -175,7 +170,8 @@ export default function Navbar() {
             >
               Properties
             </Link>
-            {session && (
+            {/* ✅ Fixed: Only show Add Property when logged in */}
+            {session?.user && (
               <Link
                 href="/properties/add"
                 className={`${isActive("/properties/add")} text-white block rounded-md px-3 py-2 text-base font-medium`}
@@ -183,7 +179,7 @@ export default function Navbar() {
                 Add Property
               </Link>
             )}
-            {!session && (
+            {!session?.user && (
               <button
                 onClick={() => signIn("google")}
                 className="flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-3 w-full"
