@@ -45,16 +45,27 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   return (
     <div className="rounded-xl shadow-md relative">
       {/* Property Image */}
-      <Image
-        src={property.images[0] || "/images/property-default.jpg"}
-        alt={property.name}
-        height={0}
-        width={0}
-        sizes="100vw"
-        className="w-full h-auto rounded-t-xl"
-        priority
-      />
-
+      {property.images?.[0] ? (
+        <Image
+          src={property.images[0]}
+          alt={property.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover"
+          //className="w-full h-auto rounded-t-xl"
+          priority
+        />
+      ) : (
+        <div className="relative w-full h-48">
+          <Image
+            src="/images/property-default.jpg"
+            alt="No image available"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      )}
       <div className="p-4">
         {/* Property Type and Name */}
         <div className="text-left md:text-center lg:text-left mb-6">

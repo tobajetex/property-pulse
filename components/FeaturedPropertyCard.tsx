@@ -46,14 +46,18 @@ export default function FeaturedPropertyCard({
 
   return (
     <div className="bg-white rounded-xl shadow-md relative flex flex-col md:flex-row">
-      <Image
-        src={property.images[0] || "/images/property-default.jpg"}
-        alt={property.name}
-        width={0}
-        height={0}
-        sizes="100vw"
-        className="object-cover rounded-t-xl md:rounded-tr-none md:rounded-l-xl w-full md:w-2/5"
-      />
+      {/* Image with fill pattern - fixes the warning */}
+      <div className="relative w-full md:w-2/5 h-48 md:h-auto min-h-[200px] rounded-t-xl md:rounded-tr-none md:rounded-l-xl overflow-hidden">
+        <Image
+          src={property.images[0] || "/images/property-default.jpg"}
+          alt={property.name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+        />
+      </div>
+
       <div className="p-6">
         <h3 className="text-xl font-bold">{property.name}</h3>
         <div className="text-gray-600 mb-4">{property.type}</div>

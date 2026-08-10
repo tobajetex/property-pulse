@@ -54,14 +54,28 @@ export default async function PropertyDetailPage({
       <section>
         <div className="container-xl m-auto">
           <div className="grid grid-cols-1">
-            <Image
-              src={property.images?.[0] || "/images/property-default.jpg"}
-              alt={property.name}
-              className="object-cover h-[400px] w-full"
-              width={1800}
-              height={400}
-              priority
-            />
+            {/* Header Image Section */}
+            <div className="relative h-[400px] w-full overflow-hidden">
+              {property.images?.[0] ? (
+                <Image
+                  src={property.images[0]}
+                  alt={property.name}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <span className="text-6xl block mb-4">🏠</span>
+                    <span className="text-blue-400 text-xl">
+                      No Image Available
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
