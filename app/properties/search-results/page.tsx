@@ -7,16 +7,16 @@ import Property from "@/models/Property";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 interface SearchResultsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     location?: string;
     propertyType?: string;
-  };
+  }>;
 }
 
 export default async function SearchResultsPage({
   searchParams,
 }: SearchResultsPageProps) {
-  const { location = "", propertyType = "All" } = searchParams;
+  const { location = "", propertyType = "All" } = await searchParams;
 
   await connectDB();
 
