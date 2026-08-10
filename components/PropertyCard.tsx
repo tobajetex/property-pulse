@@ -31,6 +31,11 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   const getRateDisplay = () => {
+    // ✅ Check if rates exists and has values
+    if (!property.rates) {
+      return "Contact for pricing";
+    }
+
     const { rates } = property;
     if (rates.monthly) {
       return `$${rates.monthly.toLocaleString()}/mo`;
@@ -63,6 +68,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
           />
         </div>
       )}
@@ -96,17 +102,17 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
         {/* Rate Type Badges */}
         <div className="flex justify-center gap-4 text-green-900 text-sm mb-4">
-          {property.rates.weekly && (
+          {property.rates?.weekly && (
             <p>
               <FaMoneyBill className="inline mr-2" /> Weekly
             </p>
           )}
-          {property.rates.monthly && (
+          {property.rates?.monthly && (
             <p>
               <FaMoneyBill className="inline mr-2" /> Monthly
             </p>
           )}
-          {property.rates.nightly && (
+          {property.rates?.nightly && (
             <p>
               <FaMoneyBill className="inline mr-2" /> Nightly
             </p>

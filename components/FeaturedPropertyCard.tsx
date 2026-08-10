@@ -54,7 +54,8 @@ export default function FeaturedPropertyCard({
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
-          priority
+          loading="eager"
+          fetchPriority="high"
         />
       </div>
 
