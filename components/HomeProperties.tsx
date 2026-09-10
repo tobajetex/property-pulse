@@ -4,6 +4,7 @@ import Property from "@/models/Property";
 import PropertyCard from "./PropertyCard";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 
+export const dynamic = "force-dynamic";
 export default async function HomeProperties() {
   await connectDB();
 

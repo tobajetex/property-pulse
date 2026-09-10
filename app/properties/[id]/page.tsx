@@ -20,7 +20,6 @@ interface PropertyDetailPageProps {
 export default async function PropertyDetailPage({
   params,
 }: PropertyDetailPageProps) {
-  // ✅ AWAIT the params before accessing
   const { id } = await params;
 
   await connectDB();
@@ -44,9 +43,26 @@ export default async function PropertyDetailPage({
 
   const property = convertToSerializeableObject(propertyDoc);
 
-  if (property.amenities && !Array.isArray(property.amenities)) {
+  // Ensure images is an array
+  let validImages: string[] = [];
+  if (property.images) {
+    if (typeof property.images === "string") {
+      validImages = property.images
+        .split(",")
+        .filter((url: string) => url.startsWith("http"));
+    } else if (Array.isArray(property.images)) {
+      validImages = property.images.filter(
+        (img: any) => typeof img === "string" && img.startsWith("http"),
+      );
+    }
+  }
+
+  // Ensure amenities is an array
+  if (!property.amenities || !Array.isArray(property.amenities)) {
     property.amenities = [];
   }
+
+  const hasImage = validImages.length > 0 && validImages[0];
 
   return (
     <>
@@ -54,11 +70,10 @@ export default async function PropertyDetailPage({
       <section>
         <div className="container-xl m-auto">
           <div className="grid grid-cols-1">
-            {/* Header Image Section */}
             <div className="relative h-[400px] w-full overflow-hidden">
-              {property.images?.[0] ? (
+              {hasImage ? (
                 <Image
-                  src={property.images[0]}
+                  src={validImages[0]}
                   alt={property.name}
                   fill
                   className="object-cover"
@@ -170,23 +185,21 @@ export default async function PropertyDetailPage({
               </div>
 
               {/* Amenities */}
-              {property.amenities &&
-                Array.isArray(property.amenities) &&
-                property.amenities.length > 0 && (
-                  <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-                    <h3 className="text-lg font-bold mb-6">Amenities</h3>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2">
-                      {property.amenities.map(
-                        (amenity: string, index: number) => (
-                          <li key={index}>
-                            <span className="text-green-600 mr-2">✓</span>{" "}
-                            {amenity}
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  </div>
-                )}
+              {property.amenities.length > 0 && (
+                <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+                  <h3 className="text-lg font-bold mb-6">Amenities</h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2">
+                    {property.amenities.map(
+                      (amenity: string, index: number) => (
+                        <li key={index}>
+                          <span className="text-green-600 mr-2">✓</span>{" "}
+                          {amenity}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              )}
             </main>
 
             {/* Sidebar */}

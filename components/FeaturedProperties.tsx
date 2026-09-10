@@ -3,6 +3,8 @@ import Property from "@/models/Property";
 import FeaturedPropertyCard from "./FeaturedPropertyCard";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 
+export const dynamic = "force-dynamic";
+
 export default async function FeaturedProperties() {
   await connectDB();
 
