@@ -15,10 +15,12 @@ export default function Navbar() {
 
   // Close menus when route changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsProfileMenuOpen(false);
   }, [pathname]);
 

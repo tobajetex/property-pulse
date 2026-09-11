@@ -47,7 +47,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     // If images is an array
     if (Array.isArray(property.images)) {
       const validUrls = property.images.filter(
-        (img: any) => typeof img === "string" && img.startsWith("http"),
+        (img: unknown) => typeof img === "string" && img.startsWith("http"),
       );
       return validUrls.length > 0 ? validUrls[0] : null;
     }

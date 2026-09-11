@@ -52,7 +52,7 @@ export default async function PropertyDetailPage({
         .filter((url: string) => url.startsWith("http"));
     } else if (Array.isArray(property.images)) {
       validImages = property.images.filter(
-        (img: any) => typeof img === "string" && img.startsWith("http"),
+        (img: unknown) => typeof img === "string" && img.startsWith("http"),
       );
     }
   }

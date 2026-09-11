@@ -23,7 +23,7 @@ export default async function SearchResultsPage({
   const locationPattern = new RegExp(location, "i");
 
   // Build query
-  let query: any = {};
+  const query: Record<string, unknown> = {};
 
   if (location) {
     query.$or = [

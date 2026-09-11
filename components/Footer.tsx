@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -10,12 +11,12 @@ export default function Footer() {
         <div className="flex flex-wrap justify-center md:justify-start mb-4 md:mb-0">
           <ul className="flex space-x-4">
             <li>
-              <a
+              <Link
                 href="/properties"
                 className="text-gray-600 hover:text-gray-900"
               >
                 Properties
-              </a>
+              </Link>
             </li>
             <li>
               <a href="/terms" className="text-gray-600 hover:text-gray-900">
