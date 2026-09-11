@@ -13,6 +13,8 @@ interface SearchResultsPageProps {
   }>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function SearchResultsPage({
   searchParams,
 }: SearchResultsPageProps) {

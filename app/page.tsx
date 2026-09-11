@@ -3,6 +3,8 @@ import InfoBoxes from "@/components/InfoBoxes";
 import FeaturedProperties from "@/components/FeaturedProperties";
 import HomeProperties from "@/components/HomeProperties";
 
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   return (
     <>
